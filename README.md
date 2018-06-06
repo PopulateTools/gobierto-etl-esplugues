@@ -1,6 +1,6 @@
-# Gobierto ETL for Mataro
+# Gobierto ETL for Esplugues
 
-ETL scripts for Gobierto Mataró site: https://pressupost.mataro.cat/
+ETL scripts for Gobierto Esplugues site: https://portalobert.esplugues.cat/
 
 ## Setup
 
@@ -10,11 +10,6 @@ This repository relies heavily in [gobierto_data](https://github.com/PopulateToo
 
 ## Available operations
 
-- clean-quotes
-- transform-planned
-- transform-executed
-- transform-planned-updated
-- import-planned-budgets
-- import-executed-budgets
-- import-planned-budgets-updated
+- gobierto_plans/extractor
+- gobierto_plans/importer
 
