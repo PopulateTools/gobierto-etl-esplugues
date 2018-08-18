@@ -42,12 +42,14 @@ puts "== Running Esplugues import_pam for #{@site.domain}"
 puts "===== Loading data..."
 importer = EspluguesImporter.new(domain: domain, file_path: file_path, plan_slug: plan_slug, reset_previous_data: reset_previous_data)
 
-puts "===== Creating/updating plan..."
-importer.initialize_plan
-puts "===== Creating/updating categories..."
-importer.initialize_categories
-puts "===== Creating/updating nodes..."
-importer.initialize_nodes
+ActiveRecord::Base.transaction do
+  puts "===== Creating/updating plan..."
+  importer.initialize_plan
+  puts "===== Creating/updating categories..."
+  importer.initialize_categories
+  puts "===== Creating/updating nodes..."
+  importer.initialize_nodes
+end
 
 puts "== Import finished"
 
