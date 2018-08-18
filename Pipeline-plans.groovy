@@ -26,12 +26,6 @@ pipeline {
                 sh "cd ${GOBIERTO}; bin/rails runner ${ESPLUGUES_ETL}/operations/gobierto_plans/importer/run.rb ${WORKING_DIR}/plan.json ${ESPLUGUES_DOMAIN} ${PAM_SLUG}"
             }
         }
-        stage('Load > Update caches') {
-            steps {
-                sh "cd ${GOBIERTO}; bin/rails gobierto_plans:category:progress_cache[${PAM_SLUG}]"
-                sh "cd ${GOBIERTO}; bin/rails gobierto_plans:category:uid_cache[${PAM_SLUG}]"
-            }
-        }
     }
     post {
         failure {
