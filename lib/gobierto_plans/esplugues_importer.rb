@@ -26,11 +26,16 @@ class EspluguesImporter
         GobiertoPlans::PlanType.create(name_translations: { "ca" => "pam", "es" => "pam", "en" => "pam" }, site_id: @site.id)
       @plan.update(plan_type: @plan_type)
     end
+
+    if @plan.categories_vocabulary.blank?
+      @plan.create_categories_vocabulary(name_translations: @plan.title_translations, site: @plan.site)
+      @plan.update_attribute(:vocabulary_id, @plan.vocabulary_id)
+    end
   end
 
   def initialize_categories
     check_plan
-    @plan.categories.destroy_all if reset_previous_data?
+    @plan.categories_vocabulary.terms.destroy_all if reset_previous_data?
     initialize_actuation_categories
 
     configure_plan if reset_previous_data?
@@ -59,12 +64,17 @@ class EspluguesImporter
       current_level = @plan
       level_names.each_with_index do |name, index|
         name = name.sub(/\d./, '')
-        current_level = current_level.categories.with_name_translation(name, :ca).first ||
-          current_level.categories.new(name_translations: {ca: name}).tap do |category|
-          category.level = index
-          category.plan ||= @plan
-          category.save
-        end
+        current_level = GobiertoPlans::CategoryTermDecorator.new(
+          current_level.categories.where("#{ GobiertoCommon::Term.table_name }.name_translations @> ?::jsonb", { ca: name }.to_json).first ||
+          current_level.categories.new(name_translations: { ca: name }).tap do |category|
+            category.level = index
+            category.vocabulary_id = @plan.categories_vocabulary.id
+            if !category.valid? && (same_name_categories = @plan.categories_vocabulary.terms.with_name_translation(name, :ca)).exists?
+              category.slug += "-#{ same_name_categories.count + 1 }"
+            end
+            category.save
+          end
+        )
       end
       @categories[actuation_category["a_key"]] = current_level
     end
