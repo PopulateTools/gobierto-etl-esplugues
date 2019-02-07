@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# Extract > Download data sources
-cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download-s3/run.rb "esplugues/budgets/AJ-TrimLoc-20181t.xbrl" /tmp/esplugues/
+XBRL_FILE="AJ-TrimLoc-20181t.xbrl"
 
-cd $DEV_DIR/gobierto-etl-utils/; ruby operations/gobierto_budgets/xbrl/trimloc/transform-execution/run.rb operations/gobierto_budgets/xbrl/dictionaries/xbrl_trimloc_dictionary.yml /tmp/esplugues/AJ-TrimLoc-20181t.xbrl 8077 2018 /tmp/esplugues/budgets-execution-2018.json
+# Extract > Download data sources
+cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download-s3/run.rb "esplugues/budgets/$XBRL_FILE" /tmp/esplugues/
+
+cd $DEV_DIR/gobierto-etl-utils/; ruby operations/gobierto_budgets/xbrl/trimloc/transform-execution/run.rb operations/gobierto_budgets/xbrl/dictionaries/xbrl_trimloc_dictionary.yml /tmp/esplugues/$XBRL_FILE 8077 2018 /tmp/esplugues/budgets-execution-2018.json
 
 cd $DEV_DIR/gobierto-etl-utils/; ruby operations/gobierto_budgets/import-executed-budgets/run.rb /tmp/esplugues/budgets-execution-2018.json 2018
 
