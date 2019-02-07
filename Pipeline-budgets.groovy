@@ -15,19 +15,9 @@ pipeline {
               sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download-s3/run.rb 'esplugues/budgets/${XBRL_FILE}' ${WORKING_DIR}"
             }
         }
-        stage('Transform > Transform planned budgets files') {
-            steps {
-              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/xbrl/trimloc/transform-planned/run.rb operations/gobierto_budgets/xbrl/dictionaries/xbrl_trimloc_dictionary.yml ${WORKING_DIR}/${XBRL_FILE} ${ESPLUGUES_ID} 2018 ${WORKING_DIR}/budgets-planned-2018.json"
-            }
-        }
         stage('Transform > Transform executed budgets files') {
             steps {
               sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/xbrl/trimloc/transform-execution/run.rb operations/gobierto_budgets/xbrl/dictionaries/xbrl_trimloc_dictionary.yml ${WORKING_DIR}/${XBRL_FILE} ${ESPLUGUES_ID} 2018 ${WORKING_DIR}/budgets-execution-2018.json"
-            }
-        }
-        stage('Load > Import planned file') {
-            steps {
-              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/import-planned-budgets/run.rb ${WORKING_DIR}/budgets-planned-2018.json 2018"
             }
         }
         stage('Load > Import executed files') {
