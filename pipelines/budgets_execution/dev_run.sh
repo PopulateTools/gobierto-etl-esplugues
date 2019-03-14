@@ -2,7 +2,7 @@
 
 XBRL_FILE="AJ-TrimLoc-20181t.xbrl"
 WORKING_DIR=/tmp/esplugues
-GOBIERTO_ETL_UTILS=$DEV_DIR/gobierto-etl-utils;
+GOBIERTO_ETL_UTILS=$DEV_DIR/gobierto-etl-utils
 
 # Extract > Download data sources
 cd $GOBIERTO_ETL_UTILS; ruby operations/download-s3/run.rb "esplugues/budgets/$XBRL_FILE" $WORKING_DIR/

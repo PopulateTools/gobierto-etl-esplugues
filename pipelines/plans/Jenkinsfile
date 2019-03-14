@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Extract > Download data sources') {
             steps {
-                sh "cd ${ESPLUGUES_ETL}; ruby operations/gobierto_plans/extractor/run.rb ${WORKING_DIR}/plan.json"
+                sh "cd ${ESPLUGUES_ETL};  ${WORKING_DIR}/plan.json"
             }
         }
         stage('Extract > Check JSON format') {
