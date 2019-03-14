@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Extract > Generate JSON
+# Extract > Download data sources
 cd $DEV/gobierto-etl-esplugues/; ruby operations/gobierto_plans/extractor/run.rb /tmp/esplugues/plan.json
 
 # Extract > Check JSON format
