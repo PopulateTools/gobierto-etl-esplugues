@@ -5,15 +5,16 @@ pipeline {
         PATH = "/home/ubuntu/.rbenv/shims:$PATH"
         GOBIERTO_ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
         ESPLUGUES_ETL = "/var/www/gobierto-etl-esplugues/current/"
-        GOBIERTO = "/var/www/gobierto/current/"
-        WORKING_DIR="/tmp/esplugues"
-        ESPLUGUES_DOMAIN="portalobert.esplugues.cat"
-        PAM_SLUG="pam-2016-2019"
+        WORKING_DIR = "/tmp/esplugues"
+        PAM_SLUG = "pam-2016-2019"
+        // Variables that must be defined via Jenkins UI:
+        // GOBIERTO = "/var/www/gobierto/current/"
+        // ESPLUGUES_DOMAIN="portalobert.esplugues.cat"
     }
     stages {
         stage('Extract > Download data sources') {
             steps {
-                sh "cd ${ESPLUGUES_ETL}; ruby operations/gobierto_plans/extractor/run.rb ${WORKING_DIR}/plan.json"
+                sh "cd ${ESPLUGUES_ETL};  ${WORKING_DIR}/plan.json"
             }
         }
         stage('Extract > Check JSON format') {

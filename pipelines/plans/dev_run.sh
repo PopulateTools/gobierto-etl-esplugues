@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# Extract > Generate JSON
-cd $DEV/gobierto-etl-esplugues/; ruby operations/gobierto_plans/extractor/run.rb /tmp/esplugues/plan.json
+WORKING_DIR=/tmp/esplugues
+
+# Extract > Download data sources
+cd $DEV_DIR/gobierto-etl-esplugues; ruby operations/gobierto_plans/extractor/run.rb $WORKING_DIR/plan.json
 
 # Extract > Check JSON format
-cd $DEV/gobierto-etl-utils/; ruby operations/check-json/run.rb /tmp/esplugues/plan.json
+cd $DEV_DIR/gobierto-etl-utils; ruby operations/check-json/run.rb $WORKING_DIR/plan.json
 
 # Load > Import plans
-cd $DEV/gobierto; bin/rails runner $DEV/gobierto-etl-esplugues/operations/gobierto_plans/importer/run.rb /tmp/esplugues/plan.json esplugues.gobify.net pam-2016-2019 reset_previous_data
+cd $DEV_DIR/gobierto; bin/rails runner $DEV_DIR/gobierto-etl-esplugues/operations/gobierto_plans/importer/run.rb $WORKING_DIR/plan.json esplugues.gobify.net pam-2016-2019 reset_previous_data
 
 # # Load > Update caches
 # cd $DEV/gobierto; bin/rails gobierto_plans:category:progress_cache[pam-2016-2019]
