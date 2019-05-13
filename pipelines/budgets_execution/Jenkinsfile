@@ -6,7 +6,7 @@ pipeline {
         GOBIERTO_ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
         ESPLUGUES_ID = "8077"
         WORKING_DIR = "/tmp/esplugues"
-        XBRL_FILE = "AJ-TrimLoc-20184t.xbrl"
+        XBRL_FILE = "AJ-TrimLoc-20191t.xbrl"
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO = "/var/www/gobierto/current/"
     }
@@ -18,18 +18,18 @@ pipeline {
         }
         stage('Transform > Transform executed budgets files') {
             steps {
-              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/xbrl/trimloc/transform-execution/run.rb operations/gobierto_budgets/xbrl/dictionaries/xbrl_trimloc_dictionary.yml ${WORKING_DIR}/${XBRL_FILE} ${ESPLUGUES_ID} 2018 ${WORKING_DIR}/budgets-execution-2018.json"
+              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/xbrl/trimloc/transform-execution/run.rb operations/gobierto_budgets/xbrl/dictionaries/xbrl_trimloc_dictionary.yml ${WORKING_DIR}/${XBRL_FILE} ${ESPLUGUES_ID} 2019 ${WORKING_DIR}/budgets-execution-2019.json"
             }
         }
         stage('Load > Import executed files') {
             steps {
-              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/import-executed-budgets/run.rb ${WORKING_DIR}/budgets-execution-2018.json 2018"
+              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/import-executed-budgets/run.rb ${WORKING_DIR}/budgets-execution-2019.json 2019"
             }
         }
         stage('Load > Calculate totals') {
           steps {
             sh "echo ${ESPLUGUES_ID} > ${WORKING_DIR}/organization.id.txt"
-              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/update_total_budget/run.rb '2018' ${WORKING_DIR}/organization.id.txt"
+              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/update_total_budget/run.rb '2019' ${WORKING_DIR}/organization.id.txt"
           }
         }
         stage('Load > Calculate bubbles') {
@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Load > Calculate annual data') {
           steps {
-            sh "cd ${GOBIERTO}; bin/rails runner ${GOBIERTO_ETL_UTILS}/operations/gobierto_budgets/annual_data/run.rb '2018' ${WORKING_DIR}/organization.id.txt"
+            sh "cd ${GOBIERTO}; bin/rails runner ${GOBIERTO_ETL_UTILS}/operations/gobierto_budgets/annual_data/run.rb '2019' ${WORKING_DIR}/organization.id.txt"
           }
         }
         stage('Load > Publish activity') {
