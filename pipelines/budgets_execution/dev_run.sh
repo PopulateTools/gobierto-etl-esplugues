@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 XBRL_FILE="AJ-TrimLoc-20191t.xbrl"
 YEAR=2019
 WORKING_DIR=/tmp/esplugues
