@@ -21,9 +21,10 @@ Bundler.require
 
 def parse_invoice_row(row)
   formatted_date = Date.strptime(row["date"], "%m/%d/%Y").strftime("%Y-%m-%d")
+  value = row["value"].tr(".", "").tr(",", ".").to_f
 
   {
-    value: row["value"].to_f,
+    value: value,
     date: formatted_date,
     invoice_id: row["invoice_id"],
     provider_id: row["provider_id"],
