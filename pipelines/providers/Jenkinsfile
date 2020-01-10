@@ -1,0 +1,85 @@
+email = "popu-servers+jenkins@populate.tools "
+pipeline {
+    agent any
+    environment {
+        PATH = "/home/ubuntu/.rbenv/shims:$PATH"
+        GOBIERTO_ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
+        ESPLUGUES_ETL = "/var/www/gobierto-etl-esplugues/current/"
+        ESPLUGUES_ID = "8077"
+        WORKING_DIR="/tmp/esplugues"
+        // Variables that must be defined via Jenkins UI:
+        // GOBIERTO = "/var/www/gobierto/current/"
+    }
+    stages {
+        stage('Clear working dir') {
+            steps {
+              sh "rm -rf ${WORKING_DIR}"
+            }
+        }
+        stage('Extract > Download data sources') {
+            steps {
+              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download-s3/run.rb 'esplugues/providers' ${WORKING_DIR}"
+            }
+        }
+        stage('Extract > Convert to UTF8') {
+            steps {
+              sh '''
+for file in ${WORKING_DIR}/*.csv
+do
+  cd ${GOBIERTO_ETL_UTILS}; ruby operations/convert-to-utf8/run.rb $file $file"_utf8"
+done
+'''
+            }
+        }
+        stage('Extract > Check CSV format') {
+            steps {
+              sh '''
+for file in ${WORKING_DIR}/*_utf8
+do
+  cd ${GOBIERTO_ETL_UTILS}; ruby operations/check-csv/run.rb $file
+done
+'''
+            }
+        }
+        stage('Load > Clear previous providers') {
+            steps {
+              sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/clear-previous-providers/run.rb ${ESPLUGUES_ID}"
+            }
+        }
+        stage('Load > Transform providers') {
+            steps {
+                sh '''
+for file in ${WORKING_DIR}/*_utf8
+do
+  cd ${ESPLUGUES_ETL}; ruby operations/gobierto_budgets/transform-providers/run.rb ${ESPLUGUES_ID} $file $file"_transformed.json"
+done
+'''
+            }
+        }
+        stage('Load > Import providers') {
+            steps {
+                sh '''
+for file in ${WORKING_DIR}/*_transformed.json
+do
+  cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/import-invoices/run.rb $file
+done
+'''
+            }
+        }
+        stage('Load > Publish activity') {
+            steps {
+              sh "echo ${ESPLUGUES_ID} > ${WORKING_DIR}/organization.id.txt"
+              sh "cd ${GOBIERTO}; bin/rails runner ${GOBIERTO_ETL_UTILS}/operations/gobierto/publish-activity/run.rb providers_updated ${WORKING_DIR}/organization.id.txt"
+            }
+        }
+    }
+    post {
+        failure {
+            echo 'This will run only if failed'
+            mail body: "Project: ${env.JOB_NAME} - Build Number: ${env.BUILD_NUMBER} - URL de build: ${env.BUILD_URL}",
+                charset: 'UTF-8',
+                subject: "ERROR CI: Project name -> ${env.JOB_NAME}",
+                to: email
+        }
+    }
+}
