@@ -19,6 +19,15 @@ Bundler.require
 #   /path/to/project/operations/gobierto_budgets/import-providers/run.rb 8077 input.json output.json
 #
 
+DNI_REGEX = /\A\d{8}[A-Z]/i
+NIE_REGEX = /\A[A-Z]\d{7}[A-Z]/i
+
+def freelance?(row)
+  row["freelance"].downcase == "true" ||
+  row["provider_id"].match?(DNI_REGEX) ||
+  row["provider_id"].match?(NIE_REGEX)
+end
+
 def parse_invoice_row(row)
   formatted_date = Date.strptime(row["date"], "%m/%d/%Y").strftime("%Y-%m-%d")
   value = row["value"].tr(".", "").tr(",", ".").to_f
@@ -30,7 +39,7 @@ def parse_invoice_row(row)
     provider_id: row["provider_id"],
     provider_name: row["provider_name"].try(:strip),
     subject: row["subject"],
-    freelance: row["freelance"].downcase == "true"
+    freelance: freelance?(row)
   }
 end
 
