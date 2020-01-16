@@ -2,7 +2,7 @@
 
 set -e
 
-XBRL_FILE="AJ-TrimLoc-20191t.xbrl"
+XBRL_FILE="AJ-TrimLoc-20193t.xbrl"
 YEAR=2019
 WORKING_DIR=/tmp/esplugues
 GOBIERTO_ETL_UTILS=$DEV_DIR/gobierto-etl-utils
