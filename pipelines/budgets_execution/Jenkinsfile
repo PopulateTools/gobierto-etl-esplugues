@@ -6,7 +6,7 @@ pipeline {
         GOBIERTO_ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
         ESPLUGUES_ID = "8077"
         WORKING_DIR = "/tmp/esplugues"
-        XBRL_FILE = "AJ-TrimLoc-20191t.xbrl"
+        XBRL_FILE = "AJ-TrimLoc-20193t.xbrl"
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO = "/var/www/gobierto/current/"
     }
