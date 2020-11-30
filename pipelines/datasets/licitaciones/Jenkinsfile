@@ -2,11 +2,11 @@ email = "popu-servers+jenkins@populate.tools "
 pipeline {
     agent any
     environment {
-        FOLDER = "gobierto_etl_esplugues_contracts"
+        FOLDER = "licitaciones"
         PATH = "$HOME/.rbenv/shims:$PATH"
         ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
-        DATASET_NAME = "Contratos"
-        DATASET_SLUG = "contratos"
+        DATASET_NAME = "Licitaciones"
+        DATASET_SLUG = "licitaciones"
         DATASET_TABLE_NAME = "${FOLDER}"
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO_DATA_SOURCE_URL = ""
@@ -14,7 +14,7 @@ pipeline {
         // ETL = "/var/www/gobierto-etl-esplugues/current/"
     }
     stages {
-        stage('Import contratos') {
+        stage('Import licitaciones') {
             steps {
               sh '''#!/bin/bash
                 source ${ETL}/.rbenv-vars;
@@ -43,4 +43,5 @@ pipeline {
         }
     }
 }
+
 
