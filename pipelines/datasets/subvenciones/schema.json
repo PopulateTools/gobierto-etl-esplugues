@@ -1,0 +1,16 @@
+{
+  "call":{"original_name": "Convocatoria", "type":"text"},
+  "budget_line":{"original_name": "Aplicación presupuestaria", "type":"text"},
+  "grant_date":{
+    "original_name": "Fecha de concesión",
+    "type": "date",
+    "optional_params": { "date_format": "DD/MM/YYYY" }
+  },
+  "beneficiary":{"original_name": "Beneficiario", "type":"text"},
+  "amount":{"original_name": "Importe", "type":"text"},
+  "administration":{"original_name": "Administración", "type":"text"},
+  "department":{"original_name": "Departamento", "type":"text"},
+  "authority":{"original_name": "Órgano", "type":"text"},
+  "rules":{"original_name": "Bases reguladoras", "type":"text"},
+  "tool":{"original_name": "Instrumento", "type":"text"}
+}
