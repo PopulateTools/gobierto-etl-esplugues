@@ -22,17 +22,17 @@ pipeline {
         }
         stage('Extract > Download data sources') {
             steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download/run.rb '${DATA_SOURCE_URL}' ${WORKING_DIR}/subsidies.csv"
+                sh "cd ${ETL_UTILS}; ruby operations/download/run.rb '${DATA_SOURCE_URL}' ${WORKING_DIR}/subsidies.csv"
             }
         }
         stage('Extract > Convert data to UTF8') {
             steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/convert-to-utf8/run.rb ${WORKING_DIR}/subsidies.csv ${WORKING_DIR}/subsidies_utf8.csv"
+                sh "cd ${ETL_UTILS}; ruby operations/convert-to-utf8/run.rb ${WORKING_DIR}/subsidies.csv ${WORKING_DIR}/subsidies_utf8.csv"
             }
         }
         stage('Extract > Check CSV format') {
             steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/check-csv/run.rb ${WORKING_DIR}/subsidies_utf8.csv"
+                sh "cd ${ETL_UTILS}; ruby operations/check-csv/run.rb ${WORKING_DIR}/subsidies_utf8.csv"
             }
         }
         stage('Import contratos') {
