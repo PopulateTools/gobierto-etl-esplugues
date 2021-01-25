@@ -30,16 +30,9 @@ pipeline {
                 sh "cd ${ETL_UTILS}; ruby operations/convert-to-utf8/run.rb ${WORKING_DIR}/subsidies.csv ${WORKING_DIR}/subsidies_utf8.csv"
             }
         }
-        stage('Transform > Anonymize people') {
-            steps {
-              sh '''#!/bin/bash
-                csvsql --query 'select "Administración", "Departamento", "Órgano", "Convocatoria", "Bases reguladoras", "Aplicación presupuestaria", "Fecha de concesión", case when instr("Beneficiario", "*") > 0 THEN "" ELSE "Beneficiario" END as "Beneficiario", "Importe", "Instrumento" from subsidies_utf8' #{WORKING_DIR}/subsidies_utf8.csv > #{WORKING_DIR}/subsidies_utf8_anon.csv"
-              '''
-            }
-        }
         stage('Extract > Check CSV format') {
             steps {
-                sh "cd ${ETL_UTILS}; ruby operations/check-csv/run.rb ${WORKING_DIR}/subsidies_utf8_anon.csv"
+                sh "cd ${ETL_UTILS}; ruby operations/check-csv/run.rb ${WORKING_DIR}/subsidies_utf8.csv"
             }
         }
         stage('Import subsidies') {
@@ -54,7 +47,7 @@ pipeline {
                   --table-name $DATASET_TABLE_NAME \
                   --gobierto-url $GOBIERTO_DATA_DEST_URL \
                   --schema-path ${ETL}/pipelines/datasets/${FOLDER}/schema.json \
-                  --file-path ${WORKING_DIR}/subsidies_utf8_anon.csv
+                  --file-path ${WORKING_DIR}/subsidies_utf8.csv
               '''
             }
         }
