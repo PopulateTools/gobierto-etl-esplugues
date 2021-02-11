@@ -1,0 +1,65 @@
+email = "popu-servers+jenkins@populate.tools "
+pipeline {
+    agent any
+    environment {
+        FOLDER = "subvenciones"
+        PATH = "$HOME/.rbenv/shims:$PATH"
+        ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
+        DATASET_NAME = "Subvenciones"
+        DATASET_SLUG = "${FOLDER}"
+        DATASET_TABLE_NAME = "${FOLDER}"
+        WORKING_DIR = "/tmp/esplugues_subsidies"
+        // Variables that must be defined via Jenkins UI:
+        // DATA_SOURCE_URL = ""
+        // GOBIERTO_DATA_DEST_URL = ""
+        // ETL = "/var/www/gobierto-etl-esplugues/current/"
+    }
+    stages {
+        stage('Clean working dir') {
+          steps {
+            sh "rm -rf ${WORKING_DIR}"
+          }
+        }
+        stage('Extract > Download data sources') {
+            steps {
+                sh "cd ${ETL_UTILS}; ruby operations/download/run.rb '${DATA_SOURCE_URL}' ${WORKING_DIR}/subsidies.csv"
+            }
+        }
+        stage('Extract > Convert data to UTF8') {
+            steps {
+                sh "cd ${ETL_UTILS}; ruby operations/convert-to-utf8/run.rb ${WORKING_DIR}/subsidies.csv ${WORKING_DIR}/subsidies_utf8.csv"
+            }
+        }
+        stage('Extract > Check CSV format') {
+            steps {
+                sh "cd ${ETL_UTILS}; ruby operations/check-csv/run.rb ${WORKING_DIR}/subsidies_utf8.csv"
+            }
+        }
+        stage('Import subsidies') {
+            steps {
+              sh '''#!/bin/bash
+                source ${ETL}/.rbenv-vars;
+                cd ${ETL_UTILS};
+                ruby operations/gobierto_data/upload-dataset/run.rb \
+                  --api-token $WRITE_API_TOKEN \
+                  --name "$DATASET_NAME" \
+                  --slug $DATASET_SLUG \
+                  --table-name $DATASET_TABLE_NAME \
+                  --gobierto-url $GOBIERTO_DATA_DEST_URL \
+                  --schema-path ${ETL}/pipelines/datasets/${FOLDER}/schema.json \
+                  --file-path ${WORKING_DIR}/subsidies_utf8.csv
+              '''
+            }
+        }
+    }
+    post {
+        failure {
+            echo 'This will run only if failed'
+            mail body: "Project: ${env.JOB_NAME} - Build Number: ${env.BUILD_NUMBER} - URL de build: ${env.BUILD_URL}",
+                charset: 'UTF-8',
+                subject: "ERROR CI: Project name -> ${env.JOB_NAME}",
+                to: email
+        }
+    }
+}
+
