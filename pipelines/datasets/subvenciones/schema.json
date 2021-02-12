@@ -11,6 +11,7 @@
     "optional_params": { "date_format": "DD/MM/YYYY" }
   },
   "beneficiary":{"original_name": "Beneficiario", "type":"text"},
+  "beneficiary_type":{"type":"text"},
   "amount":{"original_name": "Importe", "type":"text"},
   "tool":{"original_name": "Instrumento", "type":"text"}
 }
