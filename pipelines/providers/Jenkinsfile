@@ -10,6 +10,9 @@ pipeline {
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO = "/var/www/gobierto/current/"
     }
+    options {
+        retry(3)
+    }
     stages {
         stage('Clear working dir') {
             steps {
@@ -24,21 +27,21 @@ pipeline {
         stage('Extract > Convert to UTF8') {
             steps {
               sh '''
-for file in ${WORKING_DIR}/*.csv
-do
-  cd ${GOBIERTO_ETL_UTILS}; ruby operations/convert-to-utf8/run.rb $file $file"_utf8"
-done
-'''
+                for file in ${WORKING_DIR}/*.csv
+                do
+                  cd ${GOBIERTO_ETL_UTILS}; ruby operations/convert-to-utf8/run.rb $file $file"_utf8"
+                done
+              '''
             }
         }
         stage('Extract > Check CSV format') {
             steps {
               sh '''
-for file in ${WORKING_DIR}/*_utf8
-do
-  cd ${GOBIERTO_ETL_UTILS}; ruby operations/check-csv/run.rb $file
-done
-'''
+                for file in ${WORKING_DIR}/*_utf8
+                do
+                  cd ${GOBIERTO_ETL_UTILS}; ruby operations/check-csv/run.rb $file
+                done
+              '''
             }
         }
         stage('Load > Clear previous providers') {
@@ -49,21 +52,21 @@ done
         stage('Load > Transform providers') {
             steps {
                 sh '''
-for file in ${WORKING_DIR}/*_utf8
-do
-  cd ${ESPLUGUES_ETL}; ruby operations/gobierto_budgets/transform-providers/run.rb ${ESPLUGUES_ID} $file $file"_transformed.json"
-done
-'''
+                  for file in ${WORKING_DIR}/*_utf8
+                  do
+                    cd ${ESPLUGUES_ETL}; ruby operations/gobierto_budgets/transform-providers/run.rb ${ESPLUGUES_ID} $file $file"_transformed.json"
+                  done
+                '''
             }
         }
         stage('Load > Import providers') {
             steps {
                 sh '''
-for file in ${WORKING_DIR}/*_transformed.json
-do
-  cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/import-invoices/run.rb $file
-done
-'''
+                  for file in ${WORKING_DIR}/*_transformed.json
+                  do
+                    cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto_budgets/import-invoices/run.rb $file
+                  done
+                '''
             }
         }
         stage('Load > Publish activity') {
