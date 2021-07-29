@@ -11,6 +11,9 @@ pipeline {
         // XBRL_FILE = "AJ-TrimLoc-20194t.xbrl"
         // YEAR = 2019
     }
+    options {
+        retry(3)
+    }
     stages {
         stage('Extract > Download data sources') {
             steps {
