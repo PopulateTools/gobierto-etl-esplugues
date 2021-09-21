@@ -11,6 +11,9 @@ pipeline {
         // GOBIERTO = "/var/www/gobierto/current/"
         // ESPLUGUES_DOMAIN="portalobert.esplugues.cat"
     }
+    options {
+        retry(3)
+    }
     stages {
         stage('Extract > Download data sources') {
             steps {

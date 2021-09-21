@@ -10,6 +10,9 @@ pipeline {
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO = "/var/www/gobierto/current/"
     }
+    options {
+        retry(3)
+    }
     stages {
         stage('Clear working dir') {
             steps {
