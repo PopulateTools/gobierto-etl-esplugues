@@ -30,7 +30,7 @@ end
 
 def parse_invoice_row(row)
   formatted_date = Date.strptime(row["date"], "%d/%m/%Y").strftime("%Y-%m-%d")
-  value = row["value"].tr(".", "").tr(",", ".").to_f
+  value = row["value"].to_f
 
   {
     value: value,
