@@ -23,7 +23,7 @@ DNI_REGEX = /\A\d{8}[A-Z]/i
 NIE_REGEX = /\A[A-Z]\d{7}[A-Z]/i
 
 def freelance?(row)
-  row["freelance"].downcase == "true" ||
+  (row["freelance"].present? && row["freelance"].downcase == "true") ||
   row["provider_id"].match?(DNI_REGEX) ||
   row["provider_id"].match?(NIE_REGEX)
 end
