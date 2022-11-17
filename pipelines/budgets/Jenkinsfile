@@ -26,6 +26,7 @@ pipeline {
                   --api-token $WRITE_API_TOKEN \
                   --name "$DATASET_NAME" \
                   --slug $DATASET_SLUG \
+                  --schema-path ${ETL}/datasets/${FOLDER}/schema.json \
                   --table-name $DATASET_TABLE_NAME \
                   --gobierto-url $GOBIERTO_DATA_DEST_URL \
                   --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/annual/2022.csv" ;
@@ -34,6 +35,7 @@ pipeline {
                     --api-token $WRITE_API_TOKEN \
                     --name "$DATASET_NAME" \
                     --slug $DATASET_SLUG \
+                    --schema-path ${ETL}/datasets/${FOLDER}/schema.json \
                     --table-name $DATASET_TABLE_NAME \
                     --gobierto-url $GOBIERTO_DATA_DEST_URL \
                     --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/annual/${year}.csv" \

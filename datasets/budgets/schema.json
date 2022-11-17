@@ -1,0 +1,19 @@
+{
+  "year":{"type":"integer"},
+  "code":{"type":"text"},
+  "area":{"type":"text"},
+  "kind":{"type":"text"},
+  "name":{"type":"text"},
+  "description":{"type":"text"},
+  "initial_value":{"type":"numeric"},
+  "modified_value":{"type":"numeric"},
+  "executed_value":{"type":"numeric"},
+  "organization_id":{"type":"integer"},
+  "functional_code":{"type":"text"},
+  "custom_code":{"type":"text"},
+  "id":{"original_name": "ID", "type":"text"},
+  "freelance":{"type":"boolean"},
+  "parent_code":{"type":"text"},
+  "level":{"type":"integer"},
+  "updated_at":{"type":"date"}
+}
