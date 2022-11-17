@@ -2,7 +2,7 @@ email = "popu-servers+jenkins@populate.tools "
 pipeline {
     agent any
     environment {
-        FOLDER = "budgets"
+        FOLDER = "invoices"
         PATH = "$HOME/.rbenv/shims:$PATH"
         ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
         DATASET_NAME = "Proveedores y facturas"
@@ -17,7 +17,7 @@ pipeline {
         retry(3)
     }
     stages {
-        stage('Import budgets') {
+        stage('Import invoices') {
             steps {
               sh '''#!/bin/bash
                 source ${ETL}/.rbenv-vars;
@@ -27,6 +27,7 @@ pipeline {
                   --name "$DATASET_NAME" \
                   --slug $DATASET_SLUG \
                   --table-name $DATASET_TABLE_NAME \
+                  --schema-path ${ETL}/datasets/${FOLDER}/schema.json \
                   --gobierto-url $GOBIERTO_DATA_DEST_URL \
                   --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/providers/2020.csv" ;
                 for year in {2018..2019}; do
@@ -35,8 +36,9 @@ pipeline {
                     --name "$DATASET_NAME" \
                     --slug $DATASET_SLUG \
                     --table-name $DATASET_TABLE_NAME \
+                    --schema-path ${ETL}/datasets/${FOLDER}/schema.json \
                     --gobierto-url $GOBIERTO_DATA_DEST_URL \
-                    --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/providers/${file}.csv"
+                    --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/providers/${year}.csv" \
                     --append;
                 done
               '''
