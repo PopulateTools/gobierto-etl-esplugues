@@ -36,7 +36,7 @@ pipeline {
                     --slug $DATASET_SLUG \
                     --table-name $DATASET_TABLE_NAME \
                     --gobierto-url $GOBIERTO_DATA_DEST_URL \
-                    --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/annual/${file}.csv"
+                    --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/annual/${year}.csv" \
                     --append;
                 done
               '''

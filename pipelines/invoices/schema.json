@@ -1,0 +1,12 @@
+{
+  "location_id":{"type":"integer"},
+  "province_id":{"type":"integer"},
+  "autonomous_region_id":{"type":"integer"},
+  "value":{"type":"numeric"},
+  "date":{"type":"date"},
+  "invoice_id":{"type":"text"},
+  "provider_id":{"type":"text"},
+  "provider_name":{"type":"text"},
+  "subject":{"type":"text"},
+  "freelance":{"type":"boolean"}
+}
