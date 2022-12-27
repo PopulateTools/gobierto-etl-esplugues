@@ -2,15 +2,14 @@ email = "popu-servers+jenkins@populate.tools "
 pipeline {
     agent any
     environment {
-        FOLDER = "subvenciones"
+        FOLDER = "invoices"
         PATH = "$HOME/.rbenv/shims:$PATH"
         ETL_UTILS = "/var/www/gobierto-etl-utils/current/"
-        DATASET_NAME = "Subvenciones"
-        DATASET_SLUG = "${FOLDER}"
-        DATASET_TABLE_NAME = "${FOLDER}"
-        WORKING_DIR = "/tmp/esplugues_subsidies"
+        DATASET_NAME = "Proveedores y facturas"
+        DATASET_SLUG = "proveidors-factures"
+        DATASET_TABLE_NAME = "providers_invoices"
         // Variables that must be defined via Jenkins UI:
-        // DATA_SOURCE_URL = ""
+        // ENVIRONMENT = ""
         // GOBIERTO_DATA_DEST_URL = ""
         // ETL = "/var/www/gobierto-etl-esplugues/current/"
     }
@@ -18,27 +17,7 @@ pipeline {
         retry(3)
     }
     stages {
-        stage('Clean working dir') {
-          steps {
-            sh "rm -rf ${WORKING_DIR}"
-          }
-        }
-        stage('Extract > Download data sources') {
-            steps {
-                sh "cd ${ETL_UTILS}; ruby operations/download/run.rb '${DATA_SOURCE_URL}' ${WORKING_DIR}/subsidies.csv"
-            }
-        }
-        stage('Extract > Convert data to UTF8') {
-            steps {
-                sh "cd ${ETL_UTILS}; ruby operations/convert-to-utf8/run.rb ${WORKING_DIR}/subsidies.csv ${WORKING_DIR}/subsidies_utf8.csv"
-            }
-        }
-        stage('Extract > Check CSV format') {
-            steps {
-                sh "cd ${ETL_UTILS}; ruby operations/check-csv/run.rb ${WORKING_DIR}/subsidies_utf8.csv"
-            }
-        }
-        stage('Import subsidies') {
+        stage('Import invoices') {
             steps {
               sh '''#!/bin/bash
                 source ${ETL}/.rbenv-vars;
@@ -48,9 +27,20 @@ pipeline {
                   --name "$DATASET_NAME" \
                   --slug $DATASET_SLUG \
                   --table-name $DATASET_TABLE_NAME \
+                  --schema-path ${ETL}/datasets/${FOLDER}/schema.json \
                   --gobierto-url $GOBIERTO_DATA_DEST_URL \
-                  --schema-path ${ETL}/pipelines/datasets/${FOLDER}/schema.json \
-                  --file-path ${WORKING_DIR}/subsidies_utf8.csv
+                  --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/providers/2020.csv" ;
+                for year in {2018..2019}; do
+                  ruby operations/gobierto_data/upload-dataset/run.rb \
+                    --api-token $WRITE_API_TOKEN \
+                    --name "$DATASET_NAME" \
+                    --slug $DATASET_SLUG \
+                    --table-name $DATASET_TABLE_NAME \
+                    --schema-path ${ETL}/datasets/${FOLDER}/schema.json \
+                    --gobierto-url $GOBIERTO_DATA_DEST_URL \
+                    --file-url "https://gobierto-populate-${ENVIRONMENT}.s3.eu-west-1.amazonaws.com/gobierto_budgets/8077/data/providers/${year}.csv" \
+                    --append;
+                done
               '''
             }
         }
