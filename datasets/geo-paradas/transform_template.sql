@@ -21,5 +21,4 @@ CREATE VIEW data AS
   ,tipus as "type"
   ,adreça as "location"
   ,geom 
-  FROM metro_raw
-  ;
+  FROM metro_raw;

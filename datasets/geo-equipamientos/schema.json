@@ -1,0 +1,10 @@
+{
+    "id":{"type":"text"},
+    "equipment_name":{"type":"text"},
+    "equipment_type":{"type":"text"},
+    "location":{"type":"text"},
+    "web":{"type":"text"},
+    "phone_number":{"type":"text"},
+    "geom":{"type":"text"}
+  }
+  

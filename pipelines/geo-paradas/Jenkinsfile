@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Extract > Parse transform template') {
           steps {
-            sh "sed \"s/<YEAR>/${YEAR}/g\" $ETL/datasets/afiliados_seguridad_social/transform_template.sql | sed \"s/<SHORT_YEAR>/${SHORT_YEAR}/g\" | sed \"s/<MONTH>/${MONTH}/g\" > ${WORKING_DIR}/transform.sql"
+            sh "sed \"s/<YEAR>/${YEAR}/g\" $ETL/datasets/geo-paradas/transform_template.sql | sed \"s/<SHORT_YEAR>/${SHORT_YEAR}/g\" | sed \"s/<MONTH>/${MONTH}/g\" > ${WORKING_DIR}/transform.sql"
           }
         }
         stage('Transform > Apply transform queries') {
@@ -51,10 +51,10 @@ pipeline {
               bundle exec ruby operations/gobierto_data/upload-dataset/run.rb \
                     --api-token $GOBIERTO_API_TOKEN \
                     --gobierto-url ${GOBIERTO_URL} \
-                    --name "Afiliados Seguridad Social" \
-                    --slug "afiliados-seguridad-social" \
-                    --table-name "afiliados_seguridad_social" \
-                    --schema-path $ETL/datasets/afiliados_seguridad_social/schema.json \
+                    --name "Paradas" \
+                    --slug "geo-paradas" \
+                    --table-name "geo_paradas" \
+                    --schema-path $ETL/datasets/geo-paradas/schema.json \
                     --file-path ${WORKING_DIR}/data.csv \
                     --append
             '''
