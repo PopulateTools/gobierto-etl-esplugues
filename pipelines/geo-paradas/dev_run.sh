@@ -24,7 +24,7 @@ for table in $table_list; do
   cd $ETL_UTILS; ruby operations/download/run.rb "https://mun.nexusgeographics.com/geoserver/esplugues/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=esplugues%3A${table}&maxFeatures=10000&outputFormat=csv" $WORKING_DIR/${table}_raw.csv
 done 
 # Transform > Apply transform template
-sed "s/<table>/${table}/g" $ETL/datasets/geo-paradas/transform_template.sql > ${WORKING_DIR}/transform.sql
+sed "s/<YEAR>/${YEAR}/g" $ETL/datasets/geo-paradas/transform_template.sql > ${WORKING_DIR}/transform.sql
 
 # Transform > Apply transform queries
 cd $ETL_UTILS; ruby operations/apply-sqlite-transform/run.rb $WORKING_DIR/transform.sql $WORKING_DIR/data.sqlite
