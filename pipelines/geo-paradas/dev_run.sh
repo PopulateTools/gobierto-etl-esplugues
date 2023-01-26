@@ -11,7 +11,6 @@ WORKING_DIR=/tmp/geo_paradas
 ETL_UTILS=$DEV_DIR/gobierto-etl-utils
 ETL=$DEV_DIR/gobierto-etl-esplugues
 GOBIERTO_URL=$1
-YEAR=2022
 
 # Clean working dir
 cd $ETL_UTILS; ruby operations/prepare-working-directory/run.rb $WORKING_DIR
@@ -22,9 +21,10 @@ table_list="bus trambaix metro"
 for table in $table_list; do 
   echo "Processing $table"
   cd $ETL_UTILS; ruby operations/download/run.rb "https://mun.nexusgeographics.com/geoserver/esplugues/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=esplugues%3A${table}&maxFeatures=10000&outputFormat=csv" $WORKING_DIR/${table}_raw.csv
+  ruby operations/load-csv-sqlite/run.rb $WORKING_DIR/${table}_raw.csv $WORKING_DIR/data.sqlite ','
 done 
 # Transform > Apply transform template
-sed "s/<YEAR>/${YEAR}/g" $ETL/datasets/geo-paradas/transform_template.sql > ${WORKING_DIR}/transform.sql
+cp $ETL/datasets/geo-paradas/transform.sql  ${WORKING_DIR}/transform.sql
 
 # Transform > Apply transform queries
 cd $ETL_UTILS; ruby operations/apply-sqlite-transform/run.rb $WORKING_DIR/transform.sql $WORKING_DIR/data.sqlite
