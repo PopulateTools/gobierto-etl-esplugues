@@ -8,9 +8,8 @@ pipeline {
         ETL_UTILS = "/var/www/gobierto-etl-utils/current"
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO_URL = "https://demo-datos.gobify.net"
-        // YEAR
-        // MONTH
-        // SHORT_YEAR
+        // table_list = "atencio_social cultura ensenyament esplais_jubilats esport mercats residencies_geriatriques salut"
+
     }
     stages {
         stage('Clean working dir') {
@@ -20,27 +19,26 @@ pipeline {
         }
         stage('Download data') {
           steps {
-            sh "cd ${ETL_UTILS}; bundle exec ruby operations/download/run.rb "
-          }
+            for table in ${table_list}; do
+              echo "Processing ${table}"
+              sh 'cd ${ETL_UTILS}; bundle exec ruby operations/download/run.rb "https://mun.nexusgeographics.com/geoserver/esplugues/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=esplugues%3A${table}&maxFeatures=10000&outputFormat=csv" $WORKING_DIR/${table}_raw.csv
+                  ruby operations/load-csv-sqlite/run.rb $WORKING_DIR/${table}_raw.csv $WORKING_DIR/data.sqlite "," ${table}_raw'
+            done
+            }
         }
-        stage('Extract > Process XLS file') {
+        stage('Transform > Apply transform template') {
           steps {
-            sh "/home/ubuntu/.local/bin/sqlitebiter -o $WORKING_DIR/data.sqlite file $WORKING_DIR/data_raw.xlsx"
-          }
-        }
-        stage('Extract > Parse transform template') {
-          steps {
-            sh "sed \"s/<YEAR>/${YEAR}/g\" $ETL/datasets/geo-equipamientos/transform_template.sql | sed \"s/<SHORT_YEAR>/${SHORT_YEAR}/g\" | sed \"s/<MONTH>/${MONTH}/g\" > ${WORKING_DIR}/transform.sql"
+            sh "cp ${ETL}/datasets/geo-equipamientos/transform.sql  ${WORKING_DIR}/transform.sql"
           }
         }
         stage('Transform > Apply transform queries') {
           steps {
-            sh "cd ${ ETL_UTILS }; bundle exec ruby operations/apply-sqlite-transform/run.rb ${ WORKING_DIR }/transform.sql ${ WORKING_DIR }/data.sqlite"
-          }
+            sh "cd ${ETL_UTILS}; bundle exec ruby operations/apply-sqlite-transform/run.rb ${WORKING_DIR}/transform.sql ${WORKING_DIR}/data.sqlite"
+            }
         }
         stage('Transform > Extract CSV from SQLite') {
           steps {
-            sh "cd ${ ETL_UTILS }; bundle exec ruby operations/export-sqlite-csv/run.rb ${ WORKING_DIR }/data.sqlite ${ WORKING_DIR }/data.csv"
+            sh "cd ${ ETL_UTILS }; bundle exec ruby operations/export-sqlite-csv/run.rb ${WORKING_DIR}/data.sqlite ${WORKING_DIR}/data.csv"
           }
         }
         stage('Load') {
@@ -49,14 +47,13 @@ pipeline {
               source ${ETL}/.rbenv-vars;
               cd ${ETL_UTILS};
               bundle exec ruby operations/gobierto_data/upload-dataset/run.rb \
-                    --api-token $GOBIERTO_API_TOKEN \
-                    --gobierto-url ${GOBIERTO_URL} \
-                    --name "Equipamientos" \
-                    --slug "geo-equipamientos" \
-                    --table-name "geo_equipamientos" \
-                    --schema-path $ETL/datasets/geo-equipamientos/schema.json \
-                    --file-path ${WORKING_DIR}/data.csv \
-                    --append
+                --api-token $GOBIERTO_API_TOKEN \
+                --gobierto-url $GOBIERTO_URL \
+                --name "Equipamientos" \
+                --slug "geo-equipamientos" \
+                --table-name "geo-equipamientos" \
+                --schema-path $ETL/datasets/geo-equipamientos/schema.json \
+                --file-path  $WORKING_DIR/data.csv
             '''
           }
         }
