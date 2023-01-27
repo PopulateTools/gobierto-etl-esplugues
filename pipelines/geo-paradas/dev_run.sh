@@ -4,9 +4,6 @@
 #
 # https://drive.google.com/file/d/1U23HS_EQQwv8C-mcC-0rjAQiFFA_kJI2/view
 
-set -e
-source .env
-
 WORKING_DIR=/tmp/geo_paradas
 ETL_UTILS=$DEV_DIR/gobierto-etl-utils
 ETL=$DEV_DIR/gobierto-etl-esplugues
@@ -37,7 +34,7 @@ cd $ETL_UTILS;
 ruby operations/gobierto_data/upload-dataset/run.rb \
   --api-token $GOBIERTO_API_TOKEN \
   --gobierto-url $GOBIERTO_URL \
-  --name "Paradas" \
+  --name "Paradas de Transporte Público" \
   --slug "geo-paradas" \
   --table-name "geo-paradas" \
   --schema-path $ETL/datasets/geo-paradas/schema.json \

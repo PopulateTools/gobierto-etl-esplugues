@@ -4,9 +4,6 @@
 #
 # https://drive.google.com/file/d/1U23HS_EQQwv8C-mcC-0rjAQiFFA_kJI2/view
 
-set -e
-source .env
-
 WORKING_DIR=/tmp/geo_equipamientos
 ETL_UTILS=$DEV_DIR/gobierto-etl-utils
 ETL=$DEV_DIR/gobierto-etl-esplugues
@@ -16,7 +13,7 @@ GOBIERTO_URL=$1
 cd $ETL_UTILS; ruby operations/prepare-working-directory/run.rb $WORKING_DIR
 
 # Download data in CSV format
-table_list="bus trambaix metro"
+table_list="atencio_social cultura ensenyament esplais_jubilats esport mercats residencies_geriatriques salut"
 
 for table in $table_list; do
   echo "Processing $table"
