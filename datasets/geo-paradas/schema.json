@@ -1,0 +1,9 @@
+{
+    "place_id":{"type":"integer"},
+    "id":{"type":"text"},
+    "name_stop":{"type":"text"},
+    "transport_type":{"type":"text"},
+    "location":{"type":"text"},
+    "geometry":{"type":"text"}
+  }
+  
