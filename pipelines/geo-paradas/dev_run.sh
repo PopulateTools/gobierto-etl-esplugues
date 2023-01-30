@@ -21,7 +21,7 @@ for table in $table_list; do
   ruby operations/load-csv-sqlite/run.rb $WORKING_DIR/${table}_raw.csv $WORKING_DIR/data.sqlite ',' ${table}_raw
 done
 # Transform > Apply transform template
-sed "s/<place_id>/${place_id}/g" $ETL/datasets/geo-paradas/transform.sql  ${WORKING_DIR}/transform.sql
+cp $ETL/datasets/geo-paradas/transform.sql  ${WORKING_DIR}/transform.sql
 
 # Transform > Apply transform queries
 cd $ETL_UTILS; ruby operations/apply-sqlite-transform/run.rb $WORKING_DIR/transform.sql $WORKING_DIR/data.sqlite

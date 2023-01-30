@@ -9,7 +9,6 @@ pipeline {
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO_URL = "https://demo-datos.gobify.net"
         // table_list = "atencio_social cultura ensenyament esplais_jubilats esport mercats residencies_geriatriques salut"
-        // where_conditon = "place_id = 8077"
     }
     stages {
         stage('Clean working dir') {

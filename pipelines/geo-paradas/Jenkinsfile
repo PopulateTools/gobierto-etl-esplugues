@@ -9,7 +9,6 @@ pipeline {
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO_URL = "https://demo-datos.gobify.net"
         // table_list = "bus trambaix metro"
-        // where_conditon = "place_id = 8077"
     }
     stages {
         stage('Clean working dir') {
