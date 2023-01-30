@@ -8,6 +8,7 @@ WORKING_DIR=/tmp/geo_equipamientos
 ETL_UTILS=$DEV_DIR/gobierto-etl-utils
 ETL=$DEV_DIR/gobierto-etl-esplugues
 GOBIERTO_URL=$1
+place_id=8077
 
 # Clean working dir
 cd $ETL_UTILS; ruby operations/prepare-working-directory/run.rb $WORKING_DIR
@@ -21,7 +22,7 @@ for table in $table_list; do
   ruby operations/load-csv-sqlite/run.rb $WORKING_DIR/${table}_raw.csv $WORKING_DIR/data.sqlite ',' ${table}_raw
 done
 # Transform > Apply transform template
-cp $ETL/datasets/geo-equipamientos/transform.sql  ${WORKING_DIR}/transform.sql
+sed "s/<place_id>/${place_id}/g" $ETL/datasets/geo-equipamientos/transform.sql  ${WORKING_DIR}/transform.sql
 
 # Transform > Apply transform queries
 cd $ETL_UTILS; ruby operations/apply-sqlite-transform/run.rb $WORKING_DIR/transform.sql $WORKING_DIR/data.sqlite

@@ -1,6 +1,8 @@
 DROP VIEW IF EXISTS data;
 CREATE VIEW data AS
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,COALESCE(nom, adreça) as "name"
   ,tipus as "type"
   ,adreça as "location"
@@ -8,7 +10,9 @@ CREATE VIEW data AS
   FROM bus_raw
   
   UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "name"
   ,tipus as "type"
   ,adreça as "location"
@@ -16,7 +20,9 @@ CREATE VIEW data AS
   FROM trambaix_raw
 
   UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "name"
   ,tipus as "type"
   ,adreça as "location"

@@ -1,6 +1,8 @@
 DROP VIEW IF EXISTS data;
 CREATE VIEW data AS
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"
@@ -10,7 +12,9 @@ CREATE VIEW data AS
   FROM atencio_social_raw
   
 UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"
@@ -20,7 +24,9 @@ UNION ALL
   FROM cultura_raw
 
 UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"
@@ -30,7 +36,9 @@ UNION ALL
   FROM ensenyament_raw
 
 UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"
@@ -40,7 +48,9 @@ UNION ALL
   FROM esplais_jubilats_raw
 
 UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"
@@ -50,7 +60,9 @@ UNION ALL
   FROM esport_raw
 
 UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"
@@ -60,7 +72,9 @@ UNION ALL
   FROM mercats_raw
 
 UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"
@@ -70,7 +84,9 @@ UNION ALL
   FROM residencies_geriatriques_raw
 
 UNION ALL 
-  SELECT FID as id 
+  SELECT  
+  place_id
+  ,FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
   ,adreça + '. ' + cp_pobl as "location"

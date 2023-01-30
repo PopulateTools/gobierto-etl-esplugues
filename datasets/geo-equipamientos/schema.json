@@ -1,4 +1,5 @@
 {
+    "place_id":{"type":"integer"},
     "id":{"type":"text"},
     "equipment_name":{"type":"text"},
     "equipment_type":{"type":"text"},
