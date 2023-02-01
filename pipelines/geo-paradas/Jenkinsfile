@@ -4,7 +4,7 @@ pipeline {
     environment {
         WORKING_DIR = "/tmp/geo-paradas"
         PATH = "$HOME/.rbenv/shims:$PATH"
-        ETL = "/var/www/gobierto-etl-espluges/current"
+        ETL = "/var/www/gobierto-etl-esplugues/current"
         ETL_UTILS = "/var/www/gobierto-etl-utils/current"
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO_URL = "https://demo-datos.gobify.net"
