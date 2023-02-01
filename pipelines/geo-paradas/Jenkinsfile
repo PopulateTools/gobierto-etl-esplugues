@@ -50,7 +50,7 @@ pipeline {
               bundle exec ruby operations/gobierto_data/upload-dataset/run.rb \
                 --api-token $GOBIERTO_API_TOKEN \
                 --gobierto-url $GOBIERTO_URL \
-                --name "Paradas de Transporte Público" \
+                --name "Parades de Transport Públic" \
                 --slug "geo-paradas" \
                 --table-name "geo-paradas" \
                 --schema-path $ETL/datasets/geo-paradas/schema.json \
