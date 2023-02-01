@@ -4,7 +4,7 @@ CREATE VIEW data AS
   ,COALESCE(nom, adreça) as "name"
   ,tipus as "type"
   ,adreça as "location"
-  ,geom as geometry 
+  ,geom
   FROM bus_raw
   
   UNION ALL 
@@ -12,7 +12,7 @@ CREATE VIEW data AS
   ,nom as "name"
   ,tipus as "type"
   ,adreça as "location"
-  ,geom as geometry 
+  ,geom
   FROM trambaix_raw
 
   UNION ALL 
@@ -20,5 +20,5 @@ CREATE VIEW data AS
   ,nom as "name"
   ,tipus as "type"
   ,adreça as "location"
-  ,geom as geometry 
+  ,geom 
   FROM metro_raw;
