@@ -3,7 +3,7 @@ CREATE VIEW data AS
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry
@@ -13,7 +13,7 @@ UNION ALL
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry 
@@ -23,7 +23,7 @@ UNION ALL
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry
@@ -33,7 +33,7 @@ UNION ALL
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry 
@@ -43,7 +43,7 @@ UNION ALL
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry 
@@ -53,7 +53,7 @@ UNION ALL
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry 
@@ -63,7 +63,7 @@ UNION ALL
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry 
@@ -73,7 +73,7 @@ UNION ALL
   SELECT FID as id 
   ,nom as "equipment_name"
   ,tipus as "equipment_type"
-  ,adreça + '. ' + cp_pobl as "location"
+  ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
   ,geom as geometry 

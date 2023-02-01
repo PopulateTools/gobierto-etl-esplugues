@@ -50,7 +50,7 @@ pipeline {
               bundle exec ruby operations/gobierto_data/upload-dataset/run.rb \
                 --api-token $GOBIERTO_API_TOKEN \
                 --gobierto-url $GOBIERTO_URL \
-                --name "Equipamientos" \
+                --name "Equipaments" \
                 --slug "geo-equipamientos" \
                 --table-name "geo-equipamientos" \
                 --schema-path $ETL/datasets/geo-equipamientos/schema.json \
