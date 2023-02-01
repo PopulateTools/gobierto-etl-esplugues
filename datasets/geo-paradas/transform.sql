@@ -1,7 +1,7 @@
 DROP VIEW IF EXISTS data;
 CREATE VIEW data AS
   SELECT FID as id 
-  ,COALESCE(nom, adreça) as "name"
+  ,adreça as "name"
   ,tipus as "type"
   ,adreça as "location"
   ,geom
