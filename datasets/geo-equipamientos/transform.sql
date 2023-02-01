@@ -6,7 +6,7 @@ CREATE VIEW data AS
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry
+  ,geom
   FROM atencio_social_raw
   
 UNION ALL 
@@ -16,7 +16,7 @@ UNION ALL
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry 
+  ,geom 
   FROM cultura_raw
 
 UNION ALL 
@@ -26,7 +26,7 @@ UNION ALL
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry
+  ,geom
   FROM ensenyament_raw
 
 UNION ALL 
@@ -36,7 +36,7 @@ UNION ALL
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry 
+  ,geom 
   FROM esplais_jubilats_raw
 
 UNION ALL 
@@ -46,7 +46,7 @@ UNION ALL
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry 
+  ,geom 
   FROM esport_raw
 
 UNION ALL 
@@ -56,7 +56,7 @@ UNION ALL
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry 
+  ,geom 
   FROM mercats_raw
 
 UNION ALL 
@@ -66,7 +66,7 @@ UNION ALL
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry 
+  ,geom 
   FROM residencies_geriatriques_raw
 
 UNION ALL 
@@ -76,5 +76,5 @@ UNION ALL
   ,adreça || '. ' || cp_pobl as "location"
   ,correu as "email" 
   ,telefon as phone_number
-  ,geom as geometry 
+  ,geom 
   FROM salut_raw;
