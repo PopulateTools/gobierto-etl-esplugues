@@ -1,0 +1,71 @@
+email = "popu-servers+jenkins@populate.tools "
+pipeline {
+    agent any
+    environment {
+        WORKING_DIR = "/tmp/geo-paradas"
+        PATH = "$HOME/.rbenv/shims:$PATH"
+        ETL = "/var/www/gobierto-etl-esplugues/current"
+        ETL_UTILS = "/var/www/gobierto-etl-utils/current"
+        // Variables that must be defined via Jenkins UI:
+        // GOBIERTO_URL = "https://demo-datos.gobify.net"
+        // table_list = "bus trambaix metro"
+    }
+    stages {
+        stage('Clean working dir') {
+          steps {
+            sh "cd ${ETL_UTILS}; bundle exec ruby operations/prepare-working-directory/run.rb ${WORKING_DIR}"
+          }
+        }
+        stage('Download data') {
+          steps {
+            sh '''#!/bin/bash
+              for table in ${table_list}; do
+                echo "Processing $table"
+                cd $ETL_UTILS; ruby operations/download/run.rb "https://mun.nexusgeographics.com/geoserver/esplugues/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=esplugues%3A${table}&maxFeatures=10000&outputFormat=csv" $WORKING_DIR/${table}_raw.csv
+                ruby operations/load-csv-sqlite/run.rb $WORKING_DIR/${table}_raw.csv $WORKING_DIR/data.sqlite ',' ${table}_raw
+              done
+            '''
+          }
+        }
+        stage('Transform > Apply transform template') {
+          steps {
+            sh "cp ${ETL}/datasets/geo-paradas/transform.sql  ${WORKING_DIR}/transform.sql"
+          }
+        }
+        stage('Transform > Apply transform queries') {
+          steps {
+            sh "cd ${ETL_UTILS}; bundle exec ruby operations/apply-sqlite-transform/run.rb ${WORKING_DIR}/transform.sql ${WORKING_DIR}/data.sqlite"
+            }
+        }
+        stage('Transform > Extract CSV from SQLite') {
+          steps {
+            sh "cd ${ ETL_UTILS }; bundle exec ruby operations/export-sqlite-csv/run.rb ${WORKING_DIR}/data.sqlite ${WORKING_DIR}/data.csv"
+          }
+        }
+        stage('Load') {
+          steps {
+            sh '''#!/bin/bash
+              source ${ETL}/.rbenv-vars;
+              cd ${ETL_UTILS};
+              bundle exec ruby operations/gobierto_data/upload-dataset/run.rb \
+                --api-token $GOBIERTO_API_TOKEN \
+                --gobierto-url $GOBIERTO_URL \
+                --name "Parades de Transport Públic" \
+                --slug "geo-paradas" \
+                --table-name "geo-paradas" \
+                --schema-path $ETL/datasets/geo-paradas/schema.json \
+                --file-path  $WORKING_DIR/data.csv
+            '''
+          }
+        }
+    }
+    post {
+        failure {
+            echo 'This will run only if failed'
+            mail body: "Project: ${env.JOB_NAME} - Build Number: ${env.BUILD_NUMBER} - URL de build: ${env.BUILD_URL}",
+                charset: 'UTF-8',
+                subject: "ERROR CI: Project name -> ${env.JOB_NAME}",
+                to: email
+        }
+    }
+}

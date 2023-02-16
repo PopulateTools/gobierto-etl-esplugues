@@ -1,0 +1,8 @@
+{
+    "id":{"type":"text"},
+    "name_stop":{"type":"text"},
+    "transport_type":{"type":"text"},
+    "location":{"type":"text"},
+    "geom":{"type":"text"}
+  }
+  
