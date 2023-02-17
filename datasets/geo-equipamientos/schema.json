@@ -5,6 +5,5 @@
     "location":{"type":"text"},
     "web":{"type":"text"},
     "phone_number":{"type":"text"},
-    "geometry":{"type":"text"}
+    "geom":{"type":"text"}
   }
-  
