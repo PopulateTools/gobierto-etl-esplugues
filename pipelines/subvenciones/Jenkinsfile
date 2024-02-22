@@ -20,7 +20,7 @@ pipeline {
     stages {
         stage('Clean working dir') {
           steps {
-            sh "rm -rf ${WORKING_DIR}"
+            sh "cd ${ETL_UTILS}; bundle exec ruby operations/prepare-working-directory/run.rb ${WORKING_DIR}"
           }
         }
         stage('Extract > Download data sources') {
